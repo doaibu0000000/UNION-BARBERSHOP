@@ -1,0 +1,202 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Brand UNION BARBERSHOP */
+  --color-ink: #17140f;
+  --color-ink-2: #241f17;
+  --color-ink-3: #322a20;
+  --color-paper: #faf5ec;
+  --color-paper-2: #f0e8d9;
+  --color-clay: #6e6255;
+  --color-brick: #b33b2b;
+  --color-brick-deep: #8f2e22;
+  --color-gold: #c9973b;
+  --color-wa: #25d366;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #faf5ec;
+  --foreground: #17140f;
+  --card: #ffffff;
+  --card-foreground: #17140f;
+  --popover: #ffffff;
+  --popover-foreground: #17140f;
+  --primary: #b33b2b;
+  --primary-foreground: #faf5ec;
+  --secondary: #f0e8d9;
+  --secondary-foreground: #17140f;
+  --muted: #f0e8d9;
+  --muted-foreground: #6e6255;
+  --accent: #f0e8d9;
+  --accent-foreground: #17140f;
+  --destructive: #b33b2b;
+  --border: #e3d9c8;
+  --input: #e3d9c8;
+  --ring: #b33b2b;
+}
+
+.dark {
+  --background: #17140f;
+  --foreground: #faf5ec;
+  --card: #241f17;
+  --card-foreground: #faf5ec;
+  --popover: #241f17;
+  --popover-foreground: #faf5ec;
+  --primary: #d9584a;
+  --primary-foreground: #faf5ec;
+  --secondary: #322a20;
+  --secondary-foreground: #faf5ec;
+  --muted: #322a20;
+  --muted-foreground: #b3a895;
+  --accent: #322a20;
+  --accent-foreground: #faf5ec;
+  --destructive: #d9584a;
+  --border: #322a20;
+  --input: #322a20;
+  --ring: #d9584a;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: #b33b2b;
+    color: #faf5ec;
+  }
+}
+
+@layer utilities {
+  /* Garis barber pole — identitas visual klasik barbershop */
+  .barber-pole {
+    background: repeating-linear-gradient(
+      -45deg,
+      #b33b2b 0 14px,
+      #faf5ec 14px 28px,
+      #17140f 28px 42px,
+      #faf5ec 42px 56px
+    );
+  }
+  .barber-pole-soft {
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(179, 59, 43, 0.9) 0 14px,
+      rgba(250, 245, 236, 0.9) 14px 28px,
+      rgba(23, 20, 15, 0.85) 28px 42px,
+      rgba(250, 245, 236, 0.9) 42px 56px
+    );
+  }
+  /* Tekstur noise halus untuk nuansa premium */
+  .texture-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  .text-outline-paper {
+    -webkit-text-stroke: 1px rgba(250, 245, 236, 0.35);
+    color: transparent;
+  }
+}
+
+/*
+ * Scroll reveal — muncul halus TANPA kedip (lihat reveal.tsx):
+ * - State tersembunyi hanya saat JS aktif (html.js) → tanpa JS, konten tampil utuh.
+ * - Dipicu IntersectionObserver lebih awal (rootMargin positif), sehingga
+ *   elemen sudah settle saat pengguna menggulir ke posisinya.
+ */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Lonjakan cepat/anchor: tampil langsung tanpa transisi (anti kedip) */
+html.js .reveal.no-anim {
+  transition: none;
+}
+
+/* Varian above-the-fold (hero): animasi murni CSS sejak paint pertama */
+.reveal-eager {
+  animation: reveal-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .reveal-eager {
+    animation: none;
+  }
+}
+
+/* Scrollbar tipis dan rapi */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f0e8d9;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9b99b;
+  border-radius: 8px;
+  border: 2px solid #f0e8d9;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b33b2b;
+}
+
+/* trigger recompile */
